@@ -5,6 +5,7 @@ export LC_ALL=en_US.UTF-8
 main(
 
     # Cacarico Color Pallette
+    icon="💜"
     gray='#7A7276DB'
     pink='#D100AEDB'
 

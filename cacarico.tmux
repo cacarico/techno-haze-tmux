@@ -1,6 +1,4 @@
 #!/usr/bin/env bash
 
-# Sources theme
-
-current_dir="$PWD"
-$current_dir/scripts/base.sh
+CURRENT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+"$CURRENT_DIR/scripts/base.sh"
