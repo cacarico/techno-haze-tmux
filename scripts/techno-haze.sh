@@ -19,13 +19,13 @@ get_tmux_option() {
 main() {
 
     # Set configurations
-    icon_inactive=$(get_tmux_option "@technohaze" purple-heart)
-    icon_active=$(get_tmux_option "@technohaze" pink-heart)
+    icon_inactive=$(get_tmux_option "@technohaze-icon" purple-heart)
+    icon_active=$(get_tmux_option "@technohaze-icon-active" pink-heart)
     plugins=$(get_tmux_option "@technohaze-plugins" "cpu ram")
 
     # Icons
     purple_heart="💜"
-    pink_heart="🩷"
+    pink_heart="💗"
 
     # Cacarico Color Pallette
     gray='#7A7276DB'
