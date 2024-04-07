@@ -71,8 +71,8 @@ main() {
     tmux set-option -g pane-border-style "bg=default fg=${dark_blue}"
     tmux set-option -g pane-active-border-style "bg=default fg=${dark_blue}"
 
-    tmux set-window-option -g window-status-format "#W${flags}"
-    tmux set-window-option -g window-status-current-format "#[fg=${window_color}]#W"
+    tmux set-window-option -g window-status-format "#I.#W${flags}"
+    tmux set-window-option -g window-status-current-format "#[fg=${window_color}]#I.#W"
 
 
 }
