@@ -56,22 +56,22 @@ Once installed, you can start using the Techno Haze Tmux immediately. Here are s
 | Prefix + r      | Reloads the tmux configuration.
 | Prefix + -      | Splits plane horizontally
 | Prefix + \      | Splits plane vertically
-| A-Tab      | Switch to window to the right
-| A-S-Tab    | Switch to window to the left                               |
-| A-C-s      | Swap window x with window y                                |
-| A-C-h      | Swap pane with the pane to the left                        |
-| A-C-k      | Swap pane with the pane above                              |
-| A-C-j      | Swap pane with the pane below                              |
-| A-C-l      | Swap pane with the pane to the right                       |
-| A-h        | Select pane to the left                                    |
-| A-j        | Select pane downward                                       |
-| A-k        | Select pane upward                                         |
-| A-l        | Select pane to the right                                   |
-| A-H        | Resize pane to the left by 4 columns                       |
-| A-J        | Resize pane downward by 2 rows                             |
-| A-K        | Resize pane upward by 2 rows                               |
-| A-L        | Resize pane to the right by 4 columns                      |
-| A-0 to M-9 | Switch to windows 1 to 10, with M-0 switching to window 10 |
+| Alt-Tab      | Switch to window to the right
+| Alt-Shift-Tab  | Switch to window to the left                               |
+| Alt-Ctrl-s     | Swap window x with window y                                |
+| Alt-Ctrl-h     | Swap pane with the pane to the left                        |
+| Alt-Ctrl-k     | Swap pane with the pane above                              |
+| Alt-Ctrl-j     | Swap pane with the pane below                              |
+| Alt-Ctrl-l     | Swap pane with the pane to the right                       |
+| Alt-h          | Select pane to the left                                    |
+| Alt-j          | Select pane downward                                       |
+| Alt-k          | Select pane upward                                         |
+| Alt-l          | Select pane to the right                                   |
+| Alt-H          | Resize pane to the left by 4 columns                       |
+| Alt-J          | Resize pane downward by 2 rows                             |
+| Alt-K          | Resize pane upward by 2 rows                               |
+| Alt-L          | Resize pane to the right by 4 columns                      |
+| Alt-0 to Alt-9 | Switch to windows 1 to 10, with M-0 switching to window 10 |
 
 For more details on usage and customization options, refer to the theme documentation or the comments within the `techno-haze.tmux` file.
 
