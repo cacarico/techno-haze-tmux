@@ -2,6 +2,8 @@
 
 A minimalistic setup for tmux focused on productivity in a clutter-free layout.
 
+![Techno Haze Tmux](images/techno-haze-tmux.png)
+
 ## Overview
 
 The Techno Haze Tmux offers a clean and minimalist interface tailored for enhanced productivity. With a focus on simplicity and efficiency, this theme provides a clutter-free layout to help you stay focused on your tasks.
