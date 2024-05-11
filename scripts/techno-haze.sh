@@ -30,13 +30,6 @@ bind_key() {
     tmux bind-key -n "$key" "$command"
 }
 
-bind_prefix() {
-    key="$1"
-    command="$2"
-
-    tmux bind "$key" "$command"
-}
-
 bind_vim() {
     key="$1"
     command="$2"
@@ -83,14 +76,6 @@ setup_keys() {
         fi
     done
 
-    ## create session
-    # bind_prefix 'C-c' new-session
-
-    # window navigation
-
-    # split current window horizontally
-    # bind_prefix '-' 'split-window -v'
-
     # split current window vertically
     tmux bind '-' 'split-window -v'
     tmux bind '\' 'split-window -h'
@@ -103,8 +88,6 @@ setup_keys() {
 }
 
 setup_config() {
-    ## -- general -------------------------------------------------------------------
-
     # Set Prefix to alt
     tmux set-option -g prefix M-a
     tmux bind-key M-a send-prefix
