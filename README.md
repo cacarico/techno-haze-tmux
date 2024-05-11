@@ -45,7 +45,8 @@ Install plugins using `prefix + I` (NOTE: prefix by default is ctrl + b)
 Once installed, you can start using the Techno Haze Tmux immediately. Here are some key bindings to get you started:
 
 - **Alt + a**: Prefix key for tmux commands.
-- **Prefix + r**: Reloads the tmux configuration.
+
+### Keybidings
 
 | Key Combination | Functionality                 |
 |-----------------|-------------------------------|
@@ -72,23 +73,12 @@ Once installed, you can start using the Techno Haze Tmux immediately. Here are s
 
 For more details on usage and customization options, refer to the theme documentation or the comments within the `techno-haze.tmux` file.
 
-## Credits
-
-This theme is inspired by the need for a distraction-free environment in tmux. Special thanks to the tmux community for their valuable contributions and feedback.
-
 ## Contributions
 
-Contributions to the Techno Haze Tmux Theme are welcome! Feel free to submit pull requests, report issues, or suggest improvements via the project's GitHub repository.
+Contributions to the Techno Haze Tmux are welcome! Feel free to submit pull requests, report issues, or suggest improvements via the project's GitHub repository.
 
 ## License
 
 This project is licensed under the [MIT License](LICENSE), allowing for both personal and commercial use with attribution. See the LICENSE file for details.
 
 Enjoy your clutter-free tmux experience with the Techno Haze Tmux Theme!
-
-## List of Key Bindings
-
-- Alt + a: Prefix key for tmux commands.
-- Alt + r: Reloads the tmux configuration.
-- Alt + 1-4: Switches to windows 1-4.
-- Alt + Ctrl + h/j/k/l: Moves and resizes panes for optimal layout.
