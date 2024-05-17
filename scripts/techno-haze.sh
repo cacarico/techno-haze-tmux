@@ -49,6 +49,9 @@ setup_keys() {
     # Bind Ctrl + Alt + s to swap panes
     tmux bind-key -n C-M-s command-prompt -p "Swap window:","With Window:" "swap-window -s '%1' -t '%2'"
 
+    # Opens project Folder
+    tmux bind-key -n 'M-o' send-keys "exec $CURRENT_DIR/project.sh" Enter
+
 
     # Integration between Nvim and Tmux to change panes naturally
     # pane resizing
