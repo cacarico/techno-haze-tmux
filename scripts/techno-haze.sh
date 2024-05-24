@@ -84,7 +84,7 @@ setup_keys() {
 
     # Zoom Window
     tmux unbind z
-    tmux bind 'a' 'resize-pane -Z'
+    tmux bind -n 'M-f' 'resize-pane -Z'
 }
 
 setup_config() {
