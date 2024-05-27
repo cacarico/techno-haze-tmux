@@ -84,7 +84,7 @@ setup_keys() {
 
     # Zoom Window
     tmux unbind z
-    tmux bind 'a' 'resize-pane -Z'
+    tmux bind -n 'M-f' 'resize-pane -Z'
 }
 
 setup_config() {
@@ -160,10 +160,10 @@ main() {
     for plugin in ${plugins}; do
         case $plugin in
             "cpu")
-                script+="#($CURRENT_DIR/cpu.sh) "
+                script+="#($CURRENT_DIR/cpu.py) "
                 ;;
             "ram")
-                script+="#($CURRENT_DIR/ram.sh) "
+                script+="#($CURRENT_DIR/ram.py) "
                 ;;
             *)
                 script="NOT FOUND"
