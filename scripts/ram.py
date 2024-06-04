@@ -18,4 +18,4 @@ total_memory_gb = memory_info.total / (1024 ** 3)
 # Used memory in GB
 used_memory_gb = memory_info.used / (1024 ** 3)
 
-print(f"{total_memory_gb:.1f}GB/{used_memory_gb:.0f}GB")
+print(f"{used_memory_gb:.1f}GB/{total_memory_gb:.0f}GB")
