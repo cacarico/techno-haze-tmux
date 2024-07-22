@@ -8,10 +8,11 @@ A minimalistic setup for tmux focused on productivity in a clutter-free layout.
 
 The Techno Haze Tmux offers a clean and minimalist interface tailored for enhanced productivity. With a focus on simplicity and efficiency, this theme provides a clutter-free layout to help you stay focused on your tasks.
 
-## Key Features
+## Requirements
 
-## Requirements 
 - psutil == 5.9.8
+
+## Key Features
 
 - **Window Management**: Easily create new sessions and switch between windows.
 - **Pane Navigation**: Effortlessly move and resize panes for optimal organization.
