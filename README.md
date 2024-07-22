@@ -10,6 +10,9 @@ The Techno Haze Tmux offers a clean and minimalist interface tailored for enhanc
 
 ## Key Features
 
+## Requirements 
+- psutil == 5.9.8
+
 - **Window Management**: Easily create new sessions and switch between windows.
 - **Pane Navigation**: Effortlessly move and resize panes for optimal organization.
 - **Ready to Use**: It comes packed with keybidings to let you start using tmux in productive way from the day 0
