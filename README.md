@@ -66,7 +66,7 @@ Once installed, you can start using the Techno Haze Tmux immediately. Here are s
 | Alt + Ctrl + k     | Swap pane with the pane above                                  |
 | Alt + Ctrl + j     | Swap pane with the pane below                                  |
 | Alt + Ctrl + l     | Swap pane with the pane to the right                           |
-| Alt + a            | Zoom the current panel                                         |
+| Alt + f            | Zoom the current panel                                         |
 | Alt + h            | Select pane to the left                                        |
 | Alt + j            | Select pane downward                                           |
 | Alt + k            | Select pane upward                                             |
