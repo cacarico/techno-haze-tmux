@@ -10,9 +10,9 @@ get_tmux_option() {
     local default_value=$2
     local option_value=$(tmux show-option -gqv "$option")
     if [ -z "$option_value" ]; then
-        echo $default_value
+        echo "$default_value"
     else
-        echo $option_value
+        echo "$option_value"
     fi
 }
 
@@ -44,11 +44,9 @@ bind_vim() {
 setup_keys() {
 
     # Reload configuration
-    tmux bind r source-file ~/.config/tmux/tmux.conf \; display '~/.tmux.conf reloaded'
+    tmux bind r source-file ~/.config/tmux/tmux.conf
 
     # Bind Ctrl + Alt + s to swap panes
-    tmux bind-key -n C-M-s command-prompt -p "Swap window:","With Window:" "swap-window -s '%1' -t '%2'"
-
 
     # Integration between Nvim and Tmux to change panes naturally
     # pane resizing
@@ -77,10 +75,18 @@ setup_keys() {
     done
 
     # split current window vertically
-    tmux bind '-' 'split-window -v'
-    tmux bind '\' 'split-window -h'
-    tmux bind -n 'M-Tab' 'next-window' # select previous window
-    tmux bind -n 'M-BTab' 'previous-window'     # select next window
+    tmux bind -n 'M-Tab' 'next-window'
+    tmux bind -n 'M-BTab' 'previous-window'
+    tmux bind -n 'M--' 'split-window -v'
+    tmux bind -n 'M-\' 'split-window -h'
+    tmux bind -n 'M-x' kill-pane
+    tmux bind -n 'M-w' kill-window
+    tmux bind -n 'M-t' new-window
+    tmux bind -n 'M-c' copy-mode
+    tmux bind -n 'M-y' set-window-option synchronize-panes
+
+    # Set ESC to quit copy-mode
+    tmux bind -T copy-mode-vi Escape send-keys -X cancel
 
     # Zoom Window
     tmux unbind z
@@ -112,7 +118,7 @@ setup_config() {
     tmux set -g display-time 1000      # Slightly longer status messages display time
     tmux set -g status-interval 10     # Redraw status every 10 seconds
     tmux setw -g pane-base-index 1     # Make pane numbering consistent with windows
-    tmux setw -g automatic-rename off  #
+    tmux setw -g automatic-rename off  # Disables window rename
 
 
 
@@ -127,13 +133,13 @@ main() {
     setup_keys
 
     # Set configurations
-    icon_inactive=$(get_tmux_option "@technohaze-icon" purple-heart)
-    icon_active=$(get_tmux_option "@technohaze-icon-active" pink-heart)
-    plugins=$(get_tmux_option "@technohaze-plugins" "cpu ram")
-
     # Icons
     purple_heart="💜"
     pink_heart="💗"
+    icon_inactive=$(get_tmux_option "@technohaze-icon" "$purple_heart")
+    icon_active=$(get_tmux_option "@technohaze-icon-active" "${pink_heart}")
+    plugins=$(get_tmux_option "@technohaze-plugins" "cpu ram")
+
 
     # Cacarico Color Pallette
     gray='#7A7276DB'
@@ -170,7 +176,7 @@ main() {
         esac
     done
 
-    tmux set-option -g status-left " #{?client_prefix,${pink_heart},${purple_heart}} "
+    tmux set-option -g status-left " #{?client_prefix,${icon_active},${icon_inactive}} "
     tmux set-option -g status-style "bg=default"
     tmux set-option -g status-right "#[fg=${plugin_color}]$script"
     tmux set-option -g message-style "bg=default,fg=${red}"
@@ -181,7 +187,7 @@ main() {
     tmux set-window-option -g window-status-format "#I.#W${flags}"
     tmux set-window-option -g window-status-current-format "#[fg=${window_color}]#I.#W"
 
-
+    tmux bind -n M-r command-prompt -I "#W" "rename-window '%%'"
 }
 
 main
