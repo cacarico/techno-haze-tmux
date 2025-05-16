@@ -15,12 +15,6 @@ get_tmux_option() {
     [[ -z "$value" ]] && echo "$default_value" || echo "$value"
 }
 
-bind_shell() {
-    local key="$1"
-    local command="$2"
-    tmux bind-key -n "$key" run-shell "$command"
-}
-
 bind_key() {
     local key="$1"
     local command="$2"
