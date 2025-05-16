@@ -1,55 +1,49 @@
 #!/usr/bin/env bash
 
-CURRENT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+set -euo pipefail
 
+CURRENT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 export LC_ALL=en_US.UTF-8
 
-#TODO Create own function, maybe a utils.sh makes sense.
+# --- Utility Functions -------------------------------------------------------
+
 get_tmux_option() {
-    local option=$1
-    local default_value=$2
-    local option_value=$(tmux show-option -gqv "$option")
-    if [ -z "$option_value" ]; then
-        echo "$default_value"
-    else
-        echo "$option_value"
-    fi
+    local option="$1"
+    local default_value="$2"
+    local value
+    value="$(tmux show-option -gqv "$option")"
+    [[ -z "$value" ]] && echo "$default_value" || echo "$value"
 }
 
 bind_shell() {
-    key="$1"
-    command="$2"
-
+    local key="$1"
+    local command="$2"
     tmux bind-key -n "$key" run-shell "$command"
 }
 
 bind_key() {
-    key="$1"
-    command="$2"
-
+    local key="$1"
+    local command="$2"
     tmux bind-key -n "$key" "$command"
 }
 
 bind_vim() {
-    key="$1"
-    command="$2"
-    command2="$3"
+    local key="$1"
+    local cmd_vim="$2"
+    local cmd_tmux="$3"
 
-    is_vim="ps -o state= -o comm= -t '#{pane_tty}' \
+    local is_vim="ps -o state= -o comm= -t '#{pane_tty}' \
         | grep -iqE '^[^TXZ ]+ +(\\S+\\/)?g?(view|n?vim?x?)(diff)?$'"
 
-    tmux bind-key -n "$key" if-shell "$is_vim" "$command" "$command2"
+    tmux bind-key -n "$key" if-shell "$is_vim" "$cmd_vim" "$cmd_tmux"
 }
 
-setup_keys() {
+# --- Key Bindings Setup ------------------------------------------------------
 
-    # Reload configuration
+setup_keys() {
     tmux bind r source-file ~/.config/tmux/tmux.conf
 
-    # Bind Ctrl + Alt + s to swap panes
-
-    # Integration between Nvim and Tmux to change panes naturally
-    # pane resizing
+    # Tmux + Neovim navigation integration
     bind_vim 'M-h' 'send-keys M-h' 'select-pane -L'
     bind_vim 'M-j' 'send-keys M-j' 'select-pane -D'
     bind_vim 'M-k' 'send-keys M-k' 'select-pane -U'
@@ -59,24 +53,21 @@ setup_keys() {
     bind_vim 'M-K' 'send-keys M-K' 'resize-pane -U 2'
     bind_vim 'M-L' 'send-keys M-L' 'resize-pane -R 4'
     bind_vim 'M-C-h' 'send-keys M-C-h' 'run-shell "tmux select-pane -L \\; swap-pane -d -s #D"'
-    bind_vim 'M-C-k' 'send-keys M-C-k' 'run-shell "tmux select-pane -U \\; swap-pane -d -s #D"'
     bind_vim 'M-C-j' 'send-keys M-C-j' 'run-shell "tmux select-pane -D \\; swap-pane -d -s #D"'
+    bind_vim 'M-C-k' 'send-keys M-C-k' 'run-shell "tmux select-pane -U \\; swap-pane -d -s #D"'
     bind_vim 'M-C-l' 'send-keys M-C-l' 'run-shell "tmux select-pane -R \\; swap-pane -d -s #D"'
 
-    # Swap window x with windows y
     tmux bind -n 'M-C-s' command-prompt -p "Swap window:","With Window:" "swap-window -s '%1' -t '%2'"
 
-    # Select window from 1 to 10
+    # Window selection
     for i in $(seq 0 9); do
         tmux bind-key -n "M-$i" select-window -t "$i"
-        if [ "$i" == 0 ]; then
-            bind_key 'M-0' 'select-window -t 10'
-        fi
+        [[ "$i" == 0 ]] && bind_key 'M-0' 'select-window -t 10'
     done
 
-    # split current window vertically
-    tmux bind -n 'M-Tab' 'next-window'
-    tmux bind -n 'M-BTab' 'previous-window'
+    # Window and pane management
+    tmux bind -n 'M-Tab' next-window
+    tmux bind -n 'M-BTab' previous-window
     tmux bind -n 'M--' 'split-window -v'
     tmux bind -n 'M-\' 'split-window -h'
     tmux bind -n 'M-x' kill-pane
@@ -85,107 +76,88 @@ setup_keys() {
     tmux bind -n 'M-c' copy-mode
     tmux bind -n 'M-y' set-window-option synchronize-panes
 
-    # Set ESC to quit copy-mode
+    # Copy mode: ESC to cancel
     tmux bind -T copy-mode-vi Escape send-keys -X cancel
 
-    # Zoom Window
+    # Zoom
     tmux unbind z
     tmux bind -n 'M-f' 'resize-pane -Z'
 }
 
+# --- Tmux Options ------------------------------------------------------------
+
 setup_config() {
-    # Set Prefix to alt
     tmux set-option -g prefix M-a
     tmux bind-key M-a send-prefix
 
-    # Enable mouse integration
     tmux set -g mouse on
-
-    # Enable 255 color terminal
     tmux set -g default-terminal "screen-256color"
-
-    # Sets history-limit to 5000 lines
     tmux set -g history-limit 5000
-
-    # set vim mode
     tmux set-window-option -g mode-keys vi
 
-    ## -- display -------------------------------------------------------------------
+    tmux set -g base-index 1
+    tmux set -g renumber-windows on
+    tmux set -g display-panes-time 801
+    tmux set -g display-time 1000
+    tmux set -g status-interval 10
+    tmux setw -g automatic-rename off
 
-    tmux set -g base-index 1           # Start index in 1
-    tmux set -g renumber-windows on    # Renumber windows
-    tmux set -g display-panes-time 801 # Slightly longer pane indicators display time
-    tmux set -g display-time 1000      # Slightly longer status messages display time
-    tmux set -g status-interval 10     # Redraw status every 10 seconds
-    tmux setw -g automatic-rename off  # Disables window rename
-
-
-
-    # Fix image preview (https://yazi-rs.github.io/docs/image-preview#tmux-users)
+    # Image preview fix (e.g. yazi)
     tmux set -g allow-passthrough on
     tmux set -ga update-environment TERM
     tmux set -ga update-environment TERM_PROGRAM
 }
 
+# --- Main --------------------------------------------------------------------
+
 main() {
     setup_config
     setup_keys
 
-    # Set configurations
     # Icons
-    purple_heart="💜"
-    pink_heart="💗"
-    icon_inactive=$(get_tmux_option "@technohaze-icon" "$purple_heart")
-    icon_active=$(get_tmux_option "@technohaze-icon-active" "${pink_heart}")
-    plugins=$(get_tmux_option "@technohaze-plugins" "cpu ram")
+    local purple_heart="💜"
+    local pink_heart="💗"
+    local icon_inactive
+    local icon_active
+    icon_inactive="$(get_tmux_option "@technohaze-icon" "$purple_heart")"
+    icon_active="$(get_tmux_option "@technohaze-icon-active" "$pink_heart")"
+    local plugins
+    plugins="$(get_tmux_option "@technohaze-plugins" "cpu ram")"
 
+    # Color palette
+    local gray='#7A7276DB'
+    local pink='#D100AEDB'
+    local purple='#792EC0'
+    local red='#E06666'
 
-    # Cacarico Color Pallette
-    gray='#7A7276DB'
-    pink='#D100AEDB'
-    purple='#792EC0'
-    dark_blue='#33658A'
-    light_purple='#ff2bff'
-    rose='#33658A'
-    red='#E06666'
+    local window_color="$purple"
+    local plugin_color="$red"
 
-    # Set Colors
-    window_color="$purple"
-    plugin_color="$red"
-
-    # set length
     tmux set-option -g status-left-length 100
     tmux set-option -g status-right-length 100
-
-    # Reset status right
     tmux set-option -g status-right ''
 
-
-    script=''
-    for plugin in ${plugins}; do
-        case $plugin in
-            "cpu")
-                script+="#($CURRENT_DIR/cpu.py) "
-                ;;
-            "ram")
-                script+="#($CURRENT_DIR/ram.py) "
-                ;;
-            *)
-                script="NOT FOUND"
+    # Plugin output script
+    local script=""
+    for plugin in $plugins; do
+        case "$plugin" in
+            "cpu") script+="#($CURRENT_DIR/cpu.py) " ;;
+            "ram") script+="#($CURRENT_DIR/ram.py) " ;;
+            *)     script="NOT FOUND" ;;
         esac
     done
 
+    # Status bar configuration
     tmux set-option -g status-left " #{?client_prefix,${icon_active},${icon_inactive}} "
     tmux set-option -g status-style "bg=default"
     tmux set-option -g status-right "#[fg=${purple}]$script"
     tmux set-option -g message-style "bg=default,fg=${purple}"
-
     tmux set-option -g pane-border-style "bg=default fg=${purple}"
     tmux set-option -g pane-active-border-style "bg=default fg=${purple}"
-
-    tmux set-window-option -g window-status-format "#I.#W${flags}"
+    tmux set-window-option -g window-status-format "#I.#W"
     tmux set-window-option -g window-status-current-format "#[fg=${window_color}]#I.#W"
 
+    # Rename window shortcut
     tmux bind -n M-r command-prompt -I "#W" "rename-window '%%'"
 }
 
