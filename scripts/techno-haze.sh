@@ -141,8 +141,8 @@ main() {
     local script=""
     for plugin in $plugins; do
         case "$plugin" in
-            "cpu") script+="#($CURRENT_DIR/cpu.py) " ;;
-            "ram") script+="#($CURRENT_DIR/ram.py) " ;;
+            "cpu") script+="#($CURRENT_DIR/cpu.sh) " ;;
+            "ram") script+="#($CURRENT_DIR/ram.sh) " ;;
             *)     script="NOT FOUND" ;;
         esac
     done
