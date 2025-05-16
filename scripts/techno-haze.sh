@@ -64,7 +64,7 @@ setup_keys() {
     bind_vim 'M-C-l' 'send-keys M-C-l' 'run-shell "tmux select-pane -R \\; swap-pane -d -s #D"'
 
     # Swap window x with windows y
-    bind-key -n C-M-s command-prompt -p "Swap window:","With Window:" "swap-window -s '%1' -t '%2'"
+    tmux bind -n 'M-C-s' command-prompt -p "Swap window:","With Window:" "swap-window -s '%1' -t '%2'"
 
     # Select window from 1 to 10
     for i in $(seq 0 9); do
@@ -117,7 +117,6 @@ setup_config() {
     tmux set -g display-panes-time 801 # Slightly longer pane indicators display time
     tmux set -g display-time 1000      # Slightly longer status messages display time
     tmux set -g status-interval 10     # Redraw status every 10 seconds
-    tmux setw -g pane-base-index 1     # Make pane numbering consistent with windows
     tmux setw -g automatic-rename off  # Disables window rename
 
 
@@ -178,11 +177,11 @@ main() {
 
     tmux set-option -g status-left " #{?client_prefix,${icon_active},${icon_inactive}} "
     tmux set-option -g status-style "bg=default"
-    tmux set-option -g status-right "#[fg=${plugin_color}]$script"
-    tmux set-option -g message-style "bg=default,fg=${red}"
+    tmux set-option -g status-right "#[fg=${purple}]$script"
+    tmux set-option -g message-style "bg=default,fg=${purple}"
 
-    tmux set-option -g pane-border-style "bg=default fg=${dark_blue}"
-    tmux set-option -g pane-active-border-style "bg=default fg=${dark_blue}"
+    tmux set-option -g pane-border-style "bg=default fg=${purple}"
+    tmux set-option -g pane-active-border-style "bg=default fg=${purple}"
 
     tmux set-window-option -g window-status-format "#I.#W${flags}"
     tmux set-window-option -g window-status-current-format "#[fg=${window_color}]#I.#W"
