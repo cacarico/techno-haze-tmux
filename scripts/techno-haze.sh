@@ -76,6 +76,9 @@ setup_keys() {
     tmux bind -n 'M-c' copy-mode
     tmux bind -n 'M-y' set-window-option synchronize-panes
 
+    # Project
+    tmux bind -n M-p display-popup -E -w 90% -h 60% -T "Launch Project" "$CURRENT_DIR/projects.sh" "$projects_dir"
+
     # Copy mode: ESC to cancel
     tmux bind -T copy-mode-vi Escape send-keys -X cancel
 
@@ -111,9 +114,6 @@ setup_config() {
 # --- Main --------------------------------------------------------------------
 
 main() {
-    setup_config
-    setup_keys
-
     # Icons
     local purple_heart="💜"
     local pink_heart="💗"
@@ -123,6 +123,7 @@ main() {
     icon_active="$(get_tmux_option "@technohaze-icon-active" "$pink_heart")"
     local plugins
     plugins="$(get_tmux_option "@technohaze-plugins" "cpu ram")"
+    local projects_dir="$(get_tmux_option "@technohaze-projects-dir" "$HOME/ghq")"
 
     # Color palette
     local gray='#7A7276DB'
@@ -132,6 +133,10 @@ main() {
 
     local window_color="$purple"
     local plugin_color="$red"
+
+    setup_config
+    setup_keys
+
 
     tmux set-option -g status-left-length 100
     tmux set-option -g status-right-length 100

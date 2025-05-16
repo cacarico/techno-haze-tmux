@@ -75,6 +75,7 @@ Once installed, you can start using the Techno Haze Tmux immediately. Here are s
 | Alt + J            | Resize pane downward by 2 rows                                 |
 | Alt + K            | Resize pane upward by 2 rows                                   |
 | Alt + L            | Resize pane to the right by 4 columns                          |
+| Alt + p            | Open project selection screen                                  |
 | Alt + 0 to Alt + 9 | Switch to windows 1 to 10, with Alt + 0 switching to window 10 |
 
 For more details on usage and customization options, refer to the theme documentation or the comments within the `techno-haze.tmux` file.
