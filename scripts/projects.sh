@@ -32,7 +32,7 @@ main() {
     window_name=$(basename "$selected")
 
     local session_name
-    session_name=$(tmux list-sessions 2>/dev/null | awk '/attached/ {print $1}' | tr -d ':')
+    session_name=$(tmux display-message -p '#S')
 
     if [[ -n "$session_name" ]]; then
         project_launch "$session_name" "$window_name" "$selected"
