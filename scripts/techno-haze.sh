@@ -4,7 +4,6 @@ set -euo pipefail
 
 CURRENT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 export LC_ALL=en_US.UTF-8
-editor="$(get_tmux_option "@technohaze-editor" "$EDITOR")"
 
 # --- Utility Functions -------------------------------------------------------
 
@@ -118,6 +117,7 @@ main() {
     local plugins="$(get_tmux_option "@technohaze-plugins" "cpu ram")"
     local projects_dir="$(get_tmux_option "@technohaze-projects-dir" "$HOME/ghq")"
 
+    editor="$(get_tmux_option "@technohaze-editor" "$EDITOR")"
     # Color palette
     local gray='#7A7276DB'
     local pink='#D100AEDB'
