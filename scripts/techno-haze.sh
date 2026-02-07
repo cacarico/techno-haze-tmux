@@ -63,8 +63,8 @@ setup_keys() {
     # Window and pane management
     tmux bind -n 'M-Tab' next-window
     tmux bind -n 'M-BTab' previous-window
-    tmux bind -n 'M--' 'split-window -v'
-    tmux bind -n 'M-\' 'split-window -h'
+    tmux bind -n 'M--' 'split-window -v -c "#{pane_current_path}"'
+    tmux bind -n 'M-\' 'split-window -h -c "#{pane_current_path}"'
     tmux bind -n 'M-x' kill-pane
     tmux bind -n 'M-w' kill-window
     tmux bind -n 'M-t' new-window
