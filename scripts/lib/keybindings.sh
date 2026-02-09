@@ -59,9 +59,9 @@ setup_keys() {
         tmux bind -n M-p display-popup -E -w "$popup_width" -h "$popup_height" \
             -T "Project Launcher" "$SCRIPT_DIR/projects.sh" \
             "$TECHNO_HAZE_PROJECTS_DIR" "$TECHNO_HAZE_EDITOR" \
-            || echo "[TECHNO-HAZE WARN] Failed to bind project launcher" >&2
+            || log_warn "Failed to bind project launcher"
     else
-        echo "[TECHNO-HAZE WARN] projects.sh not found or not executable" >&2
+        log_warn "projects.sh not found or not executable"
     fi
 
     # Copy mode: ESC to cancel

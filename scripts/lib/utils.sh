@@ -1,5 +1,8 @@
 #!/usr/bin/env bash
 
+# Source logging library
+source "$(dirname "${BASH_SOURCE[0]}")/logging.sh"
+
 # --- Utility Functions -------------------------------------------------------
 
 # Function: get_tmux_option
@@ -34,7 +37,7 @@ bind_key() {
     local command="$2"
 
     if ! tmux bind-key -n "$key" "$command" 2>/dev/null; then
-        echo "[TECHNO-HAZE WARN] Failed to bind key '$key'" >&2
+        log_warn "Failed to bind key '$key'"
         return 1
     fi
 }
@@ -56,7 +59,7 @@ bind_vim() {
         | grep -iqE '^[^TXZ ]+ +(\\S+\\/)?g?(view|n?vim?x?)(diff)?$'"
 
     if ! tmux bind-key -n "$key" if-shell "$is_vim" "$cmd_vim" "$cmd_tmux" 2>/dev/null; then
-        echo "[TECHNO-HAZE WARN] Failed to bind vim-aware key '$key'" >&2
+        log_warn "Failed to bind vim-aware key '$key'"
         return 1
     fi
 }

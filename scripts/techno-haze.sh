@@ -9,6 +9,13 @@ export LC_ALL=en_US.UTF-8
 # Source all library modules in dependency order
 source "$SCRIPT_DIR/lib/validation.sh"
 source "$SCRIPT_DIR/lib/utils.sh"
+
+# Initialize logging system (must be after utils.sh for get_tmux_option)
+init_logging
+
+# Log plugin initialization
+log_info "Techno-Haze plugin loaded"
+
 source "$SCRIPT_DIR/lib/config.sh"
 source "$SCRIPT_DIR/lib/keybindings.sh"
 source "$SCRIPT_DIR/lib/statusbar.sh"

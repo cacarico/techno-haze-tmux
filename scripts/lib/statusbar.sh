@@ -41,18 +41,18 @@ setup_statusbar() {
                 if [[ -x "$SCRIPT_DIR/cpu.sh" ]]; then
                     script+="#($SCRIPT_DIR/cpu.sh) "
                 else
-                    echo "[TECHNO-HAZE WARN] cpu.sh not found or not executable" >&2
+                    log_warn "cpu.sh not found or not executable"
                 fi
                 ;;
             "ram")
                 if [[ -x "$SCRIPT_DIR/ram.sh" ]]; then
                     script+="#($SCRIPT_DIR/ram.sh) "
                 else
-                    echo "[TECHNO-HAZE WARN] ram.sh not found or not executable" >&2
+                    log_warn "ram.sh not found or not executable"
                 fi
                 ;;
             *)
-                echo "[TECHNO-HAZE WARN] Unknown plugin: $plugin" >&2
+                log_warn "Unknown plugin: $plugin"
                 ;;
         esac
     done
