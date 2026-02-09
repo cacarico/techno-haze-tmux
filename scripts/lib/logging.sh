@@ -3,20 +3,11 @@
 # --- Logging Configuration ---------------------------------------------------
 
 # Constants
-readonly DEFAULT_LOG_FILE="$HOME/.cache/techno-haze-tmux/plugin.log"
 readonly MAX_LOG_LINES=100  # Keep last 100 lines only
 
 # Initialize logging (called once during plugin load)
+# Note: Assumes user options are already initialized via init_user_options()
 init_logging() {
-    # Get user configuration
-    export TECHNO_HAZE_LOG_LEVEL="$(get_tmux_option "@technohaze-log-level" "warnings")"
-    export TECHNO_HAZE_NOTIFICATION_TYPE="$(get_tmux_option "@technohaze-notification-type" "off")"
-    export TECHNO_HAZE_NOTIFICATION_COMMAND="$(get_tmux_option "@technohaze-notification-command" "")"
-    export TECHNO_HAZE_LOG_FILE="$(get_tmux_option "@technohaze-log-file" "$DEFAULT_LOG_FILE")"
-
-    # Expand tilde if present
-    TECHNO_HAZE_LOG_FILE="${TECHNO_HAZE_LOG_FILE/#\~/$HOME}"
-
     # Create log directory if it doesn't exist
     local log_dir="$(dirname "$TECHNO_HAZE_LOG_FILE")"
     mkdir -p "$log_dir" 2>/dev/null || true

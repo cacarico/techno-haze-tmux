@@ -53,10 +53,7 @@ setup_keys() {
 
     # Project launcher (with configurable dimensions)
     if [[ -x "$SCRIPT_DIR/projects.sh" ]]; then
-        local popup_width="$(get_tmux_option "@technohaze-popup-width" "70%")"
-        local popup_height="$(get_tmux_option "@technohaze-popup-height" "60%")"
-
-        tmux bind -n M-p display-popup -E -w "$popup_width" -h "$popup_height" \
+        tmux bind -n M-p display-popup -E -w "$TECHNO_HAZE_POPUP_WIDTH" -h "$TECHNO_HAZE_POPUP_HEIGHT" \
             -T "Project Launcher" "$SCRIPT_DIR/projects.sh" \
             "$TECHNO_HAZE_PROJECTS_DIR" "$TECHNO_HAZE_EDITOR" \
             || log_warn "Failed to bind project launcher"

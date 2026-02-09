@@ -1,13 +1,6 @@
 #!/usr/bin/env bash
 
 # --- Configuration Constants -------------------------------------------------
-readonly COLOR_GRAY='#7A7276DB'
-readonly COLOR_PINK='#D100AEDB'
-readonly COLOR_PURPLE='#792EC0'
-readonly COLOR_RED='#E06666'
-readonly DEFAULT_ICON_INACTIVE="💜"
-readonly DEFAULT_ICON_ACTIVE="💗"
-readonly DEFAULT_PLUGINS="cpu ram"
 readonly STATUS_LEFT_LENGTH=100
 readonly STATUS_RIGHT_LENGTH=100
 
@@ -18,15 +11,14 @@ readonly STATUS_RIGHT_LENGTH=100
 # Parameters: None
 # Returns: 0 on success
 # Side Effects: Sets status bar options, builds dynamic plugin script output
+# Note: Assumes user options are already initialized via init_user_options()
 setup_statusbar() {
-    # Icons
-    local icon_inactive="$(get_tmux_option "@technohaze-icon" "$DEFAULT_ICON_INACTIVE")"
-    local icon_active="$(get_tmux_option "@technohaze-icon-active" "$DEFAULT_ICON_ACTIVE")"
-    local plugins="$(get_tmux_option "@technohaze-plugins" "$DEFAULT_PLUGINS")"
-
-    # Color palette (with configurable overrides)
-    local window_color="$(get_tmux_option "@technohaze-window-color" "$COLOR_PURPLE")"
-    local plugin_color="$(get_tmux_option "@technohaze-plugin-color" "$COLOR_RED")"
+    # Use exported configuration variables
+    local icon_inactive="$TECHNO_HAZE_ICON"
+    local icon_active="$TECHNO_HAZE_ICON_ACTIVE"
+    local plugins="$TECHNO_HAZE_PLUGINS"
+    local window_color="$TECHNO_HAZE_WINDOW_COLOR"
+    local plugin_color="$TECHNO_HAZE_PLUGIN_COLOR"
 
     # Status bar layout
     tmux set-option -g status-left-length $STATUS_LEFT_LENGTH
@@ -66,6 +58,7 @@ setup_statusbar() {
     tmux set-option -g pane-active-border-style "bg=default fg=${COLOR_PURPLE}"
     tmux set-window-option -g window-status-format "#I.#W"
     tmux set-window-option -g window-status-current-format "#[fg=${window_color}]#I.#W"
+    log_info "Status bar configured with plugins: $plugins"
 
     # Rename window shortcut
     tmux bind -n M-r command-prompt -I "#W" "rename-window '%%'"
