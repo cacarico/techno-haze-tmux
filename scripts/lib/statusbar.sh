@@ -3,6 +3,7 @@
 # --- Configuration Constants -------------------------------------------------
 readonly STATUS_LEFT_LENGTH=100
 readonly STATUS_RIGHT_LENGTH=100
+readonly COLOR_PURPLE='#792EC0'
 
 # --- Status Bar Configuration ------------------------------------------------
 
