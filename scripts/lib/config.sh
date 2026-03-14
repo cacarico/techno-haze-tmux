@@ -1,12 +1,41 @@
 #!/usr/bin/env bash
 
-# --- Configuration Constants -------------------------------------------------
+# --- Tmux Configuration Constants --------------------------------------------
 readonly DEFAULT_TERMINAL="screen-256color"
 readonly HISTORY_LIMIT=5000
 readonly BASE_INDEX=1
 readonly DISPLAY_PANES_TIME=801
 readonly DISPLAY_MESSAGE_TIME=1000
 readonly STATUS_INTERVAL=10
+
+# --- User Option Defaults ----------------------------------------------------
+
+# Project launcher defaults
+readonly DEFAULT_PROJECTS_DIR="$HOME/ghq"
+readonly DEFAULT_EDITOR="${EDITOR:-vim}"
+readonly DEFAULT_PROJECT_MIN_DEPTH="3"
+readonly DEFAULT_PROJECT_MAX_DEPTH="3"
+readonly DEFAULT_POPUP_WIDTH="70%"
+readonly DEFAULT_POPUP_HEIGHT="60%"
+
+# Logging defaults
+readonly DEFAULT_LOG_LEVEL="warnings"
+readonly DEFAULT_NOTIFICATION_TYPE="off"
+readonly DEFAULT_NOTIFICATION_COMMAND=""
+readonly DEFAULT_LOG_FILE="$HOME/.cache/techno-haze-tmux/plugin.log"
+
+# Status bar defaults
+readonly DEFAULT_ICON="💜"
+readonly DEFAULT_ICON_ACTIVE="💗"
+readonly DEFAULT_PLUGINS="cpu ram"
+
+# Color palette
+readonly COLOR_PURPLE="#792EC0"
+readonly COLOR_RED="#E06666"
+readonly COLOR_BLUE="#6BAFED"
+readonly COLOR_PINK="#F48FB1"
+readonly COLOR_LIGHT_PURPLE="#B39DDB"
+readonly COLOR_ORANGE="#FFB86C"
 
 # --- User Options Initialization ---------------------------------------------
 
@@ -18,25 +47,26 @@ readonly STATUS_INTERVAL=10
 # Note: This is the single source of truth for all plugin configuration
 init_user_options() {
     # Project launcher options
-    export TECHNO_HAZE_PROJECTS_DIR="$(get_tmux_option "@technohaze-projects-dir" "$HOME/ghq")"
-    export TECHNO_HAZE_EDITOR="$(get_tmux_option "@technohaze-editor" "${EDITOR:-vim}")"
-    export TECHNO_HAZE_PROJECT_MIN_DEPTH="$(get_tmux_option "@technohaze-project-depth-min" "3")"
-    export TECHNO_HAZE_PROJECT_MAX_DEPTH="$(get_tmux_option "@technohaze-project-depth-max" "3")"
-    export TECHNO_HAZE_POPUP_WIDTH="$(get_tmux_option "@technohaze-popup-width" "70%")"
-    export TECHNO_HAZE_POPUP_HEIGHT="$(get_tmux_option "@technohaze-popup-height" "60%")"
+    export TECHNO_HAZE_PROJECTS_DIR="$(get_tmux_option "@technohaze-projects-dir" "$DEFAULT_PROJECTS_DIR")"
+    export TECHNO_HAZE_EDITOR="$(get_tmux_option "@technohaze-editor" "$DEFAULT_EDITOR")"
+    export TECHNO_HAZE_PROJECT_MIN_DEPTH="$(get_tmux_option "@technohaze-project-depth-min" "$DEFAULT_PROJECT_MIN_DEPTH")"
+    export TECHNO_HAZE_PROJECT_MAX_DEPTH="$(get_tmux_option "@technohaze-project-depth-max" "$DEFAULT_PROJECT_MAX_DEPTH")"
+    export TECHNO_HAZE_POPUP_WIDTH="$(get_tmux_option "@technohaze-popup-width" "$DEFAULT_POPUP_WIDTH")"
+    export TECHNO_HAZE_POPUP_HEIGHT="$(get_tmux_option "@technohaze-popup-height" "$DEFAULT_POPUP_HEIGHT")"
 
     # Logging options
-    export TECHNO_HAZE_LOG_LEVEL="$(get_tmux_option "@technohaze-log-level" "warnings")"
-    export TECHNO_HAZE_NOTIFICATION_TYPE="$(get_tmux_option "@technohaze-notification-type" "off")"
-    export TECHNO_HAZE_NOTIFICATION_COMMAND="$(get_tmux_option "@technohaze-notification-command" "")"
-    export TECHNO_HAZE_LOG_FILE="$(get_tmux_option "@technohaze-log-file" "$HOME/.cache/techno-haze-tmux/plugin.log")"
+    export TECHNO_HAZE_LOG_LEVEL="$(get_tmux_option "@technohaze-log-level" "$DEFAULT_LOG_LEVEL")"
+    export TECHNO_HAZE_NOTIFICATION_TYPE="$(get_tmux_option "@technohaze-notification-type" "$DEFAULT_NOTIFICATION_TYPE")"
+    export TECHNO_HAZE_NOTIFICATION_COMMAND="$(get_tmux_option "@technohaze-notification-command" "$DEFAULT_NOTIFICATION_COMMAND")"
+    export TECHNO_HAZE_LOG_FILE="$(get_tmux_option "@technohaze-log-file" "$DEFAULT_LOG_FILE")"
 
     # Status bar options
-    export TECHNO_HAZE_ICON="$(get_tmux_option "@technohaze-icon" "💜")"
-    export TECHNO_HAZE_ICON_ACTIVE="$(get_tmux_option "@technohaze-icon-active" "💗")"
-    export TECHNO_HAZE_PLUGINS="$(get_tmux_option "@technohaze-plugins" "cpu ram")"
-    export TECHNO_HAZE_WINDOW_COLOR="$(get_tmux_option "@technohaze-window-color" "#792EC0")"
-    export TECHNO_HAZE_PLUGIN_COLOR="$(get_tmux_option "@technohaze-plugin-color" "#E06666")"
+    export TECHNO_HAZE_ICON="$(get_tmux_option "@technohaze-icon" "$DEFAULT_ICON")"
+    export TECHNO_HAZE_ICON_ACTIVE="$(get_tmux_option "@technohaze-icon-active" "$DEFAULT_ICON_ACTIVE")"
+    export TECHNO_HAZE_PLUGINS="$(get_tmux_option "@technohaze-plugins" "$DEFAULT_PLUGINS")"
+    export TECHNO_HAZE_WINDOW_COLOR="$(get_tmux_option "@technohaze-window-color" "$COLOR_PURPLE")"
+    export TECHNO_HAZE_PLUGIN_COLOR="$(get_tmux_option "@technohaze-plugin-color" "$COLOR_RED")"
+    export TECHNO_HAZE_BORDER_COLOR="$(get_tmux_option "@technohaze-border-color" "$COLOR_PURPLE")"
 
     # Expand tilde in log file path
     TECHNO_HAZE_LOG_FILE="${TECHNO_HAZE_LOG_FILE/#\~/$HOME}"

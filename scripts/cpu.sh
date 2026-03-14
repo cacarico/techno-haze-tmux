@@ -4,63 +4,67 @@
 # Name        : Caio Quinilato Teixeira
 # Email       : caio.quinilato@gmail.com
 # Repository  : https://github.com/cacarico/techno-haze-tmux
-# Description : Gets CPU usage as percentage
-# Dependencies: /proc/stat (Linux), awk
-# Output      : CPU usage percentage (e.g., "45.3%")
+# Description : Gets CPU usage as percentage with threshold-based coloring
+# Dependencies: /proc/stat (Linux)
+# Output      : Tmux-formatted colored CPU usage (e.g., "#[fg=#B39DDB]45.3%")
 # -----------------------------------------------------------------------------
 
 set -euo pipefail
 
-# Configuration
-# Use single cache file per user for simplicity and reliability
-CACHE_FILE="/tmp/techno-haze-cpu-${USER:-$(whoami)}"
-DEFAULT_OUTPUT="0.0%"
+CACHE_DIR="${XDG_CACHE_HOME:-$HOME/.cache}/techno-haze-tmux"
+mkdir -p "$CACHE_DIR"
+CACHE_FILE="$CACHE_DIR/cpu"
 
-# Validate /proc/stat exists (Linux-specific)
+# Read user options from tmux at runtime
+get_option() { tmux show-option -gqv "$1" 2>/dev/null || true; }
+COLOR=$(get_option "@technohaze-cpu-color");                     COLOR="${COLOR:-#B39DDB}"
+WARNING_COLOR=$(get_option "@technohaze-cpu-warning-color");     WARNING_COLOR="${WARNING_COLOR:-#FFB86C}"
+ALERT_COLOR=$(get_option "@technohaze-cpu-alert-color");         ALERT_COLOR="${ALERT_COLOR:-#E06666}"
+WARNING_THRESHOLD=$(get_option "@technohaze-cpu-warning-threshold"); WARNING_THRESHOLD="${WARNING_THRESHOLD:-75}"
+THRESHOLD=$(get_option "@technohaze-cpu-threshold");             THRESHOLD="${THRESHOLD:-85}"
+
 if [[ ! -r /proc/stat ]]; then
-    echo "$DEFAULT_OUTPUT"
-    exit 0
+    echo "#[fg=${COLOR}]0.0%"; exit 0
 fi
 
-# Read current CPU stats (first line of /proc/stat)
 read -r cpu user nice system idle iowait irq softirq steal guest guest_nice < /proc/stat 2>/dev/null || {
-    echo "$DEFAULT_OUTPUT"
-    exit 0
+    echo "#[fg=${COLOR}]0.0%"; exit 0
 }
 
-# Default missing fields to zero
 : "${iowait:=0}" "${irq:=0}" "${softirq:=0}" "${steal:=0}" "${guest:=0}" "${guest_nice:=0}"
 
-# Validate numeric values
 if [[ ! "$user" =~ ^[0-9]+$ ]] || [[ ! "$idle" =~ ^[0-9]+$ ]]; then
-    echo "$DEFAULT_OUTPUT"
-    exit 0
+    echo "#[fg=${COLOR}]0.0%"; exit 0
 fi
 
-# Calculate total ticks (sum all CPU time fields)
 total=$((user + nice + system + idle + iowait + irq + softirq + steal + guest + guest_nice))
 
-# Read previous values if they exist
 if [[ -f "$CACHE_FILE" ]]; then
-    read prev_total prev_idle < "$CACHE_FILE"
+    read -r prev_total prev_idle < "$CACHE_FILE"
+    if [[ ! "$prev_total" =~ ^[0-9]+$ ]] || [[ ! "$prev_idle" =~ ^[0-9]+$ ]]; then
+        echo "#[fg=${COLOR}]0.0%"
+        echo "$total $idle" > "$CACHE_FILE"
+        exit 0
+    fi
 
-    # Calculate deltas
     total_delta=$((total - prev_total))
     idle_delta=$((idle - prev_idle))
 
-    # Avoid division by zero
     if [[ $total_delta -gt 0 ]]; then
-        # Calculate CPU usage: (1 - idle/total) * 100
-        # Use fixed-point arithmetic for precision
         cpu_usage=$(( ((total_delta - idle_delta) * 1000) / total_delta ))
-        printf "%.1f%%\n" "$(awk "BEGIN {print $cpu_usage / 10}")"
+        if [[ $cpu_usage -gt $((THRESHOLD * 10)) ]]; then
+            fg="$ALERT_COLOR"
+        elif [[ $cpu_usage -gt $((WARNING_THRESHOLD * 10)) ]]; then
+            fg="$WARNING_COLOR"
+        else
+            fg="$COLOR"
+        fi
+        printf "#[fg=%s]%d.%d%%\n" "$fg" $((cpu_usage / 10)) $((cpu_usage % 10))
     else
-        echo "$DEFAULT_OUTPUT"
+        echo "#[fg=${COLOR}]0.0%"
     fi
 else
-    # First run - initialize cache
-    echo "$DEFAULT_OUTPUT"
+    echo "#[fg=${COLOR}]0.0%"
 fi
 
-# Store current values for next run
 echo "$total $idle" > "$CACHE_FILE"

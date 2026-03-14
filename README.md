@@ -12,8 +12,8 @@ The Techno Haze Tmux offers a clean and minimalist interface tailored for enhanc
 
 - **Window Management**: Easily create new sessions and switch between windows.
 - **Pane Navigation**: Effortlessly move and resize panes for optimal organization.
-- **Ready to Use**: It comes packed with keybidings to let you start using tmux in productive way from the day 0
-- **Projec Selector**: Opens a project on your favorite editor and spawns a shell on new window
+- **Ready to Use**: It comes packed with keybindings to let you start using tmux in productive way from the day 0
+- **Project Selector**: Opens a project on your favorite editor and spawns a shell on new window
 
 ## Installation
 To install the Techno Haze Tmux, you can use [TPM](https://github.com/tmux-plugins/tpm) or clone the repo localy.
@@ -49,33 +49,137 @@ Once installed, you can start using the Techno Haze Tmux immediately. Here are s
 
 - **Alt + a**: Prefix key for tmux commands.
 
-### Keybidings
+### Keybindings
 
-| Key Combination    | Functionality                                                  |
-|--------------------|----------------------------------------------------------------|
-| Prefix + r         | Reloads the tmux configuration.                                |
-| Prefix + -         | Splits plane horizontally                                      |
-| Prefix + \         | Splits plane vertically                                        |
-| Alt + Tab          | Switch to window to the right                                  |
-| Alt + Shift + Tab  | Switch to window to the left                                   |
-| Alt + Ctrl + s     | Swap window x with window y                                    |
-| Alt + Ctrl + h     | Swap pane with the pane to the left                            |
-| Alt + Ctrl + k     | Swap pane with the pane above                                  |
-| Alt + Ctrl + j     | Swap pane with the pane below                                  |
-| Alt + Ctrl + l     | Swap pane with the pane to the right                           |
-| Alt + f            | Zoom the current panel                                         |
-| Alt + h            | Select pane to the left                                        |
-| Alt + j            | Select pane downward                                           |
-| Alt + k            | Select pane upward                                             |
-| Alt + l            | Select pane to the right                                       |
-| Alt + H            | Resize pane to the left by 4 columns                           |
-| Alt + J            | Resize pane downward by 2 rows                                 |
-| Alt + K            | Resize pane upward by 2 rows                                   |
-| Alt + L            | Resize pane to the right by 4 columns                          |
-| Alt + p            | Open Project Selector screen                                   |
-| Alt + 0 to Alt + 9 | Switch to windows 1 to 10, with Alt + 0 switching to window 10 |
+| Key Combination      | Functionality                                                    |
+|----------------------|------------------------------------------------------------------|
+| Prefix + r           | Reload the tmux configuration                                    |
+| **Pane Management**  |                                                                  |
+| Alt + -              | Split pane horizontally                                          |
+| Alt + \              | Split pane vertically                                            |
+| Alt + x              | Kill current pane                                                |
+| Alt + f              | Zoom current pane                                                |
+| Alt + h              | Select pane to the left                                          |
+| Alt + j              | Select pane downward                                             |
+| Alt + k              | Select pane upward                                               |
+| Alt + l              | Select pane to the right                                         |
+| Alt + H              | Resize pane to the left by 4 columns                             |
+| Alt + J              | Resize pane downward by 2 rows                                   |
+| Alt + K              | Resize pane upward by 2 rows                                     |
+| Alt + L              | Resize pane to the right by 4 columns                            |
+| Alt + y              | Toggle pane synchronization                                      |
+| Alt + Ctrl + h       | Swap pane with the pane to the left                              |
+| Alt + Ctrl + j       | Swap pane with the pane below                                    |
+| Alt + Ctrl + k       | Swap pane with the pane above                                    |
+| Alt + Ctrl + l       | Swap pane with the pane to the right                             |
+| **Window Management**|                                                                  |
+| Alt + t              | Open new window                                                  |
+| Alt + w              | Kill current window (with confirmation)                          |
+| Alt + r              | Rename current window                                            |
+| Alt + Tab            | Switch to next window                                            |
+| Alt + Shift + Tab    | Switch to previous window                                        |
+| Alt + Ctrl + s       | Swap window with another window                                  |
+| Alt + 0 to Alt + 9  | Switch to windows 1–10 (Alt + 0 switches to window 10)          |
+| **Copy Mode**        |                                                                  |
+| Alt + c              | Enter copy mode                                                  |
+| Escape               | Cancel copy mode (vi mode)                                       |
+| **Project Launcher** |                                                                  |
+| Alt + p              | Open Project Selector                                            |
 
 For more details on usage and customization options, refer to the theme documentation or the comments within the `techno-haze.tmux` file.
+
+## Configuration
+
+Options are set in `~/.tmux.conf` before loading the plugin.
+
+### Status Bar Plugins
+
+Enable plugins by listing them in order:
+
+```tmux
+set -g @technohaze-plugins "cpu ram kube gcp"
+```
+
+Available plugins: `cpu`, `ram`, `kube`, `gcp`
+
+### Project Selector
+
+| Option | Default | Description |
+|--------|---------|-------------|
+| `@technohaze-projects-dir` | `~/ghq` | Root directory for the FZF project picker |
+| `@technohaze-editor` | `$EDITOR` / `vim` | Editor opened in project windows |
+| `@technohaze-project-depth-min` | `3` | Minimum directory depth to scan |
+| `@technohaze-project-depth-max` | `3` | Maximum directory depth to scan |
+| `@technohaze-popup-width` | `70%` | Width of the project picker popup |
+| `@technohaze-popup-height` | `60%` | Height of the project picker popup |
+
+### Appearance
+
+| Option | Default | Description |
+|--------|---------|-------------|
+| `@technohaze-icon` | `💜` | Status bar icon when prefix is inactive |
+| `@technohaze-icon-active` | `💗` | Status bar icon when prefix is active |
+| `@technohaze-window-color` | `#792EC0` | Active window title color |
+| `@technohaze-border-color` | `#792EC0` | Pane border color |
+
+### CPU Plugin
+
+| Option | Default | Description |
+|--------|---------|-------------|
+| `@technohaze-cpu-color` | `#B39DDB` | Color when usage is normal |
+| `@technohaze-cpu-warning-color` | `#FFB86C` | Color when usage exceeds warning threshold |
+| `@technohaze-cpu-alert-color` | `#E06666` | Color when usage exceeds alert threshold |
+| `@technohaze-cpu-warning-threshold` | `75` | Warning threshold (%) |
+| `@technohaze-cpu-threshold` | `85` | Alert threshold (%) |
+
+### RAM Plugin
+
+| Option | Default | Description |
+|--------|---------|-------------|
+| `@technohaze-ram-color` | `#B39DDB` | Color when usage is normal |
+| `@technohaze-ram-warning-color` | `#FFB86C` | Color when usage exceeds warning threshold |
+| `@technohaze-ram-alert-color` | `#E06666` | Color when usage exceeds alert threshold |
+| `@technohaze-ram-warning-threshold` | `60` | Warning threshold (%) |
+| `@technohaze-ram-threshold` | `80` | Alert threshold (%) |
+
+### Kubernetes Plugin
+
+Reads `~/.kube/config` directly — no `kubectl` required.
+
+| Option | Default | Description |
+|--------|---------|-------------|
+| `@technohaze-kube-color` | `#6BAFED` | Color when context is not production |
+| `@technohaze-kube-alert-color` | `#E06666` | Color when context matches prod regex |
+
+### GCP Plugin
+
+Reads `~/.config/gcloud/` directly — no `gcloud` CLI required.
+
+| Option | Default | Description |
+|--------|---------|-------------|
+| `@technohaze-gcp-color` | `#6BAFED` | Color when project is not production |
+| `@technohaze-gcp-alert-color` | `#E06666` | Color when project matches prod regex |
+
+### Production Alert (Kubernetes & GCP)
+
+Both `kube` and `gcp` plugins turn red when the current context/project matches a configurable regex. The match is **case-insensitive**.
+
+| Option | Default | Description |
+|--------|---------|-------------|
+| `@technohaze-prod-regex` | `prod` | Regex to identify production environments |
+
+Example — match `prod`, `production`, `PRODUCTION`, `staging-prod`:
+```tmux
+set -g @technohaze-prod-regex "prod"
+```
+
+### Logging
+
+| Option | Default | Description |
+|--------|---------|-------------|
+| `@technohaze-log-level` | `warnings` | `none` / `errors` / `warnings` / `all` |
+| `@technohaze-notification-type` | `off` | `off` / `tmux` / `system` / `both` |
+| `@technohaze-log-file` | `~/.cache/techno-haze-tmux/plugin.log` | Log file path |
 
 ## Contributions
 
